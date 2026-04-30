@@ -64,4 +64,11 @@ while True:
     # anchor on pack method anchors the widget to "w" or west and padding is set to x axis
     cb1.pack(anchor="w", padx=20)
     rcount += 1
-    
+    cb2 = tk.Checkbutton(root, text=(f"{responses[count][rcount]}"), variable=state1)
+    # anchor on pack method anchors the widget to "w" or west and padding is set to x axis
+    cb2.pack(anchor="w", padx=20)
+    rcount += 1
+    cb3 = tk.Checkbutton(root, text=(f"{responses[count][rcount]}"), variable=state1)
+    # anchor on pack method anchors the widget to "w" or west and padding is set to x axis
+    cb3.pack(anchor="w", padx=20)
+    rcount += 1
