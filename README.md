@@ -1,1 +1,1 @@
-Check inside the code for specific instructions.
+Please use "pip install customtkinter."
