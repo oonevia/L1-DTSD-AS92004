@@ -1,9 +1,11 @@
 '''Lucas Russell Damasceno - 11DSD Level 1 Internal.'''
 import customtkinter as tk
 tk.set_appearance_mode("dark")
-count = -1
-count2 = 0
-count3 = 0
+callback = False
+countqd = -1
+countq = 0
+counta = 0
+acheck = 0
 responses = []
 questions = ["What player is this", 
              "Which Premier League club did Chris Wood join from Leeds United in 2017?", 
@@ -22,35 +24,43 @@ answers = [{1: ["Mohammed Salah", "Chris Wood", "Cole Palmer"]},
            {7: ["Australia", "New Zealand", "Cook Islands"]}, 
            {8: ["Everton", "Nottingham Forest", "Leeds United"]}, ]
 root = tk.CTk()
+root.attributes("-fullscreen", True)
 root.geometry("1000x1000")
 check = tk.IntVar(value=0)
 
+def available():
+    submitbutton.configure(state="normal")
 def submit():
     global option
     option = check.get()
     print(option)
+    global callback
+    callback = True
     return option
 
-while count < 9:
+while countqd < 9:
 
-    count += 1
-    count2 += 1
-    count3 = 0
-    label = tk.CTkLabel(root, text=f"Chris Wood Quiz:\nQuestion {count2}: {questions[count2]}", font=("Roboto Medium", 38))
+    callback = False
+    countqd += 1
+    countq += 1
+    counta = 0
+    label = tk.CTkLabel(root, text=f"Chris Wood Quiz:\nQuestion {countq}: {questions[countq]}", font=("Roboto Medium", 38))
     label.pack(padx=20, pady=20)
-    cb = tk.CTkRadioButton(master=root, text=f"{answers[count][count2][count3]}", variable=check, value=1)
+    cb = tk.CTkRadioButton(master=root, text=f"{answers[countqd][countq][counta]}", variable=check, value=1, command=available)
     cb.pack(padx=20, pady=20)
-    count3 += 1
-    cb2 = tk.CTkRadioButton(master=root, text=f"{answers[count][count2][count3]}", variable=check, value=2)
+    counta += 1
+    cb2 = tk.CTkRadioButton(master=root, text=f"{answers[countqd][countq][counta]}", variable=check, value=2, command=available)
     cb2.pack(padx=20, pady=20)
-    count3 += 1
-    cb3 = tk.CTkRadioButton(master=root, text=f"{answers[count][count2][count3]}", variable=check, value=3)
+    counta += 1
+    cb3 = tk.CTkRadioButton(master=root, text=f"{answers[countqd][countq][counta]}", variable=check, value=3, command=available)
     cb3.pack(padx=20, pady=20)
-    count3 += 1
+    counta += 1
 
-    submitbutton = tk.CTkButton(root, text="Submit Answer", command=submit)
+    submitbutton = tk.CTkButton(root, text="Submit Answer", command=submit, state="disabled")
     submitbutton.pack(pady=30)
-    
-    responses.append(str(submit()))
 
-    root.mainloop()
+    while callback == True:
+        responses.append(str(submit()))
+        print(responses)
+
+    root.mainloop() 
