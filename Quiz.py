@@ -1,6 +1,10 @@
 '''Lucas Russell Damasceno - 11DSD Level 1 Internal.'''
 import customtkinter as tk
 tk.set_appearance_mode("dark")
+p = 20
+score = 0
+correct = 0
+decimal= 0
 callback = False
 countqd = -1
 countq = 0
@@ -8,6 +12,15 @@ counta = 0
 acheck = 0
 responses = []
 errors = []
+funresponses = {0: "ZERO ball knowledge", 
+                0.125: "near to no knowledge on Chris Wood", 
+                0.25: "a small amount of knowledge on Chris Wood", 
+                0.375: "the normal amount of knowledge someone should have on Chris Wood", 
+                0.5: "above average knowledge on Chris Wood. Wow!", 
+                0.625: "an exceptional amount of knowledge on Chris Wood! Congrats!", 
+                0.75: "near-perfect knowledge of Chris Wood! Do you know him personally!?", 
+                0.875: "a ludicrous level of ball knowledge! Congratulations.", 
+                1: "too much knowledge on Chris Wood. You must be cheating!"}
 questions = ["What player is this", 
              "Which Premier League club did Chris Wood join from Leeds United in 2017?", 
              "At what age did Chris Wood make his debut for the New Zealand senior national team (the All Whites)", 
@@ -28,6 +41,8 @@ root = tk.CTk()
 root.attributes("-fullscreen", True)
 root.geometry("1000x1000")
 check = tk.IntVar(value=0)
+width = root.winfo_screenwidth()
+wrapping = width - width / 5
 
 def clear_screen():
     for widget in root.winfo_children():
@@ -35,15 +50,27 @@ def clear_screen():
 def available():
     submitbutton.configure(state="normal")
 def submit():
-    global option
-    option = check.get()
-    print(option)
-    global callback
-    callback = True
-    clear_screen()
-    draw()
-    return option
-
+    if countqd < 9:
+        try:
+            global option
+            option = check.get()
+            print(option)
+            global callback
+            callback = True
+            clear_screen()
+            draw()
+            return option
+        finally:
+            check.set(0)
+    else:
+        print(responses)
+        for r in range(len(responses)):
+            if responses[r] == answers[r][r+1][2]:
+                correct += 1
+                print(correct)
+        flabel = tk.CTkLabel(root, text=f"You got {score}% correct!, thats {correct}/8! - You have {funresponses[decimal]}")
+        flabel.pack(padx=p, pady=p)
+        flabel.place(relx=0.5, rely=0.5, anchor="center")
 
 try:
     def draw():
@@ -54,16 +81,16 @@ try:
         countqd += 1
         countq += 1
         counta = 0
-        label = tk.CTkLabel(root, text=f"Chris Wood Quiz:\nQuestion {countq}: {questions[countq]}", font=("Roboto Medium", 38))
-        label.pack(padx=20, pady=20)
+        qlabel = tk.CTkLabel(root, text=f"Chris Wood Quiz:\nQuestion {countq}: {questions[countq]}", font=("Roboto Medium", 38), wraplength=wrapping)
+        qlabel.pack(padx=p, pady=p)
         cb = tk.CTkRadioButton(master=root, text=f"{answers[countqd][countq][counta]}", variable=check, value=1, command=available)
-        cb.pack(padx=20, pady=20)
+        cb.pack(padx=p, pady=p)
         counta += 1
         cb2 = tk.CTkRadioButton(master=root, text=f"{answers[countqd][countq][counta]}", variable=check, value=2, command=available)
-        cb2.pack(padx=20, pady=20)
+        cb2.pack(padx=p, pady=p)
         counta += 1
         cb3 = tk.CTkRadioButton(master=root, text=f"{answers[countqd][countq][counta]}", variable=check, value=3, command=available)
-        cb3.pack(padx=20, pady=20)
+        cb3.pack(padx=p, pady=p)
         counta += 1
 
         global submitbutton
