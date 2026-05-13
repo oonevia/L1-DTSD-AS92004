@@ -1,19 +1,21 @@
 '''Lucas Russell Damasceno - 11DSD Level 1 Internal.'''
 import customtkinter as tk
-import random as ran
+import random as rnd
+
 tk.set_appearance_mode("dark")
-placeholder = 0
+
 p = 20
 score = 0
-false = 0
-decimal= 0
-callback = False
+correct = 0
+decimal = 0
 countqd = -1
 countq = 0
 counta = 0
 acheck = 0
 responses = []
 errors = []
+quiz_data = []
+
 funresponses = {0: "ZERO ball knowledge", 
                 0.125: "near to no knowledge on Chris Wood", 
                 0.25: "a small amount of knowledge on Chris Wood", 
@@ -23,98 +25,79 @@ funresponses = {0: "ZERO ball knowledge",
                 0.75: "near-perfect knowledge of Chris Wood! Do you know him personally!?", 
                 0.875: "a ludicrous level of ball knowledge! Congratulations.", 
                 1: "too much knowledge on Chris Wood. You must be cheating!"}
-questions = ["What player is this", 
-             "Which Premier League club did Chris Wood join from Leeds United in 2017?", 
-             "At what age did Chris Wood make his debut for the New Zealand senior national team (the All Whites)", 
-             "Wood became the first New Zealander to achieve what feat in the English Premier League?", 
-             "Before his professional career, which club did Wood play for in Auckland before moving to Hamilton at age 11?", 
-             "Which city was Chris Wood born in?", 
-             "Which team did Chris Wood represent at the 2020 Tokyo Olympics?", 
-             "As of late 2024, which club has Chris Wood established himself as the all-time leading goalscorer for in the Premier League?"]
-answers = [{1: ["Mohammed Salah", "Chris Wood", "Cole Palmer"]}, 
-           {2: ["Liverpool", "Burnley", "Derby County"]}, 
-           {3: ["22", "18", "21"]}, 
-           {4: ["Get more than 10 assists", "Score a hat-trick", "Move to LaLiga"]}, 
-           {5: ["Gurkha FC", "Onehunga Sports", "Auckland United"]}, 
-           {6: ["Christchurch", "Auckland", "Hamilton"]}, 
-           {7: ["Australia", "New Zealand", "Cook Islands"]}, 
-           {8: ["Everton", "Nottingham Forest", "Leeds United"]}, ]
-trueanswers = ["Chris Wood",
-"Burnley",
-"18",
-"Score a hat-trick",
-"Onehunga Sports",
-"Auckland",
-"New Zealand",
-"Nottingham Forest"]
 
-ran.shuffle(answers)
+raw_questions = [
+    ("What player is this", ["Chris Wood", "Mohammed Salah", "Cole Palmer"]),
+    ("Which Premier League club did Chris Wood join from Leeds United in 2017?", ["Burnley", "Liverpool", "Derby County"]),
+    ("At what age did Chris Wood make his debut for the New Zealand senior national team (the All Whites)", ["18", "22", "21"]),
+    ("Wood became the first New Zealander to achieve what feat in the English Premier League?", ["Score a hat-trick", "Get more than 10 assists", "Move to LaLiga"]),
+    ("Before his professional career, which club did Wood play for in Auckland before moving to Hamilton at age 11?", ["Onehunga Sports", "Gurkha FC", "Auckland United"]),
+    ("Which city was Chris Wood born in?", ["Auckland", "Christchurch", "Hamilton"]),
+    ("Which team did Chris Wood represent at the 2020 Tokyo Olympics?", ["New Zealand", "Australia", "Cook Islands"]),
+    ("As of late 2024, which club has Chris Wood established himself as the all-time leading goalscorer for in the Premier League?", ["Nottingham Forest", "Everton", "Leeds United"])
+]
+
+for q_text, answs in raw_questions:
+    correct_ans = answs[0]
+    shuffled = list(answs)
+    rnd.shuffle(shuffled)
+    quiz_data.append({"question": q_text, "options": shuffled, "correct": correct_ans})
+
+rnd.shuffle(quiz_data)
+
 root = tk.CTk()
 root.attributes("-fullscreen", True)
 root.geometry("1000x1000")
+
 check = tk.IntVar(value=0)
 width = root.winfo_screenwidth()
 wrapping = width - width / 5
 
-def clear_screen():
+def clsc():
     for widget in root.winfo_children():
         widget.destroy()
+
 def available():
     submitbutton.configure(state="normal")
+
 def submit():
-    if countqd < 9:
-        try:
-            global option
-            option = check.get()
-            print(option)
-            global callback
-            callback = True
-            clear_screen()
-            draw()
-            return option
-        finally:
-            check.set(0)
+    global countq
+    global correct
+    global score
+    global decimal
+    selindex = check.get() - 1
+    seltext = quiz_data[countq-1]["options"][selindex]
+    
+    if seltext == quiz_data[countq-1]["correct"]:
+        correct += 1
+    
+    if countq < len(quiz_data):
+        check.set(0)
+        clsc()
+        draw()
     else:
-        print(responses)
-        for r in range(len(responses)):
-            if responses[r] == placeholder:
-                false += 1
-                print(false)
-        flabel = tk.CTkLabel(root, text=f"You got {score}% correct!, thats {8 - false}/8! - You have {funresponses[decimal]}")
+        clsc()
+        score = int((correct / len(quiz_data)) * 100)
+        decimal = correct / len(quiz_data)
+        flabel = tk.CTkLabel(root, text=f"You got {score}% correct!, thats {correct}/{len(quiz_data)}! - You have {funresponses[decimal]}", font=("Roboto Medium", 25))
         flabel.pack(padx=p, pady=p)
         flabel.place(relx=0.5, rely=0.5, anchor="center")
 
-try:
-    def draw():
-        global countqd
-        global countq
-        global counta
-        callback = False
-        countqd += 1
-        countq += 1
-        counta = 0
-        qlabel = tk.CTkLabel(root, text=f"Chris Wood Quiz:\nQuestion {countq}: {questions[countq]}", font=("Roboto Medium", 38), wraplength=wrapping)
-        qlabel.pack(padx=p, pady=p)
-        cb = tk.CTkRadioButton(master=root, text=f"{answers[countqd][countq][counta]}", variable=check, value=1, command=available)
-        cb.pack(padx=p, pady=p)
-        counta += 1
-        cb2 = tk.CTkRadioButton(master=root, text=f"{answers[countqd][countq][counta]}", variable=check, value=2, command=available)
-        cb2.pack(padx=p, pady=p)
-        counta += 1
-        cb3 = tk.CTkRadioButton(master=root, text=f"{answers[countqd][countq][counta]}", variable=check, value=3, command=available)
-        cb3.pack(padx=p, pady=p)
-        counta += 1
+def draw():
+    global countq
+    global submitbutton
+    q_data = quiz_data[countq]
+    countq += 1
+    
+    qlabel = tk.CTkLabel(root, text=f"Chris Wood Quiz:\nQuestion {countq}: {q_data['question']}", font=("Roboto Medium", 38), wraplength=wrapping)
+    qlabel.pack(padx=p, pady=p)
 
-        global submitbutton
-        submitbutton = tk.CTkButton(root, text="Submit Answer", command=submit, state="disabled")
-        submitbutton.pack(pady=30)
+    for i, option in enumerate(q_data["options"]):
+        rb = tk.CTkRadioButton(master=root, text=option, variable=check, value=i+1, command=available)
+        rb.pack(padx=p, pady=10)
 
-        while callback == True:
-            responses.append(str(submit()))
-            print(responses)
-    draw()
-    root.mainloop()
-except Exception as e:
-    errors.append(e)
-    for i in range(len(errors)):
-        print(errors[i])
+    submitbutton = tk.CTkButton(root, text="Submit Answer", command=submit, state="disabled")
+    submitbutton.pack(pady=30)
+
+draw()
+root.mainloop()
