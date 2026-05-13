@@ -1,9 +1,11 @@
 '''Lucas Russell Damasceno - 11DSD Level 1 Internal.'''
 import customtkinter as tk
+import random as ran
 tk.set_appearance_mode("dark")
+placeholder = 0
 p = 20
 score = 0
-correct = 0
+false = 0
 decimal= 0
 callback = False
 countqd = -1
@@ -37,6 +39,16 @@ answers = [{1: ["Mohammed Salah", "Chris Wood", "Cole Palmer"]},
            {6: ["Christchurch", "Auckland", "Hamilton"]}, 
            {7: ["Australia", "New Zealand", "Cook Islands"]}, 
            {8: ["Everton", "Nottingham Forest", "Leeds United"]}, ]
+trueanswers = ["Chris Wood",
+"Burnley",
+"18",
+"Score a hat-trick",
+"Onehunga Sports",
+"Auckland",
+"New Zealand",
+"Nottingham Forest"]
+
+ran.shuffle(answers)
 root = tk.CTk()
 root.attributes("-fullscreen", True)
 root.geometry("1000x1000")
@@ -65,10 +77,10 @@ def submit():
     else:
         print(responses)
         for r in range(len(responses)):
-            if responses[r] == answers[r][r+1][2]:
-                correct += 1
-                print(correct)
-        flabel = tk.CTkLabel(root, text=f"You got {score}% correct!, thats {correct}/8! - You have {funresponses[decimal]}")
+            if responses[r] == placeholder:
+                false += 1
+                print(false)
+        flabel = tk.CTkLabel(root, text=f"You got {score}% correct!, thats {8 - false}/8! - You have {funresponses[decimal]}")
         flabel.pack(padx=p, pady=p)
         flabel.place(relx=0.5, rely=0.5, anchor="center")
 
