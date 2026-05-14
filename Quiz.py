@@ -27,13 +27,13 @@ funresponses = {0: "ZERO ball knowledge",
                 1: "too much knowledge on Chris Wood. You must be cheating!"}
 
 raw_questions = [
-    ("What player is this", ["Chris Wood", "Mohammed Salah", "Cole Palmer"]),
-    ("Which Premier League club did Chris Wood join from Leeds United in 2017?", ["Burnley", "Liverpool", "Derby County"]),
-    ("At what age did Chris Wood make his debut for the New Zealand senior national team (the All Whites)", ["18", "22", "21"]),
-    ("Wood became the first New Zealander to achieve what feat in the English Premier League?", ["Score a hat-trick", "Get more than 10 assists", "Move to LaLiga"]),
-    ("Before his professional career, which club did Wood play for in Auckland before moving to Hamilton at age 11?", ["Onehunga Sports", "Gurkha FC", "Auckland United"]),
-    ("Which city was Chris Wood born in?", ["Auckland", "Christchurch", "Hamilton"]),
-    ("Which team did Chris Wood represent at the 2020 Tokyo Olympics?", ["New Zealand", "Australia", "Cook Islands"]),
+    ("What player is this", ["Chris Wood", "Mohammed Salah", "Cole Palmer"]), 
+    ("Which Premier League club did Chris Wood join from Leeds United in 2017?", ["Burnley", "Liverpool", "Derby County"]), 
+    ("At what age did Chris Wood make his debut for the New Zealand senior national team (the All Whites)", ["18", "22", "21"]), 
+    ("Wood became the first New Zealander to achieve what feat in the English Premier League?", ["Score a hat-trick", "Get more than 10 assists", "Move to LaLiga"]), 
+    ("Before his professional career, which club did Wood play for in Auckland before moving to Hamilton at age 11?", ["Onehunga Sports", "Gurkha FC", "Auckland United"]), 
+    ("Which city was Chris Wood born in?", ["Auckland", "Christchurch", "Hamilton"]), 
+    ("Which team did Chris Wood represent at the 2020 Tokyo Olympics?", ["New Zealand", "Australia", "Cook Islands"]), 
     ("As of late 2024, which club has Chris Wood established himself as the all-time leading goalscorer for in the Premier League?", ["Nottingham Forest", "Everton", "Leeds United"])
 ]
 
@@ -44,17 +44,17 @@ for q_text, answs in raw_questions:
     quiz_data.append({"question": q_text, "options": shuffled, "correct": correct_ans})
 
 rnd.shuffle(quiz_data)
-
+ 
 root = tk.CTk()
 root.attributes("-fullscreen", True)
 root.geometry("1000x1000")
 
 check = tk.IntVar(value=0)
 width = root.winfo_screenwidth()
-wrapping = width - width / 5
+wrapping = width - width / 5 
 
 def clsc():
-    for widget in root.winfo_children():
+    for widget in root.winfo_children(): 
         widget.destroy()
 
 def available():
@@ -66,8 +66,8 @@ def submit():
     global score
     global decimal
     selindex = check.get() - 1
-    seltext = quiz_data[countq-1]["options"][selindex]
-    
+    seltext = quiz_data[countq-1]["options"][selindex] 
+     
     if seltext == quiz_data[countq-1]["correct"]:
         correct += 1
     
@@ -75,29 +75,34 @@ def submit():
         check.set(0)
         clsc()
         draw()
-    else:
+    else: 
         clsc()
         score = int((correct / len(quiz_data)) * 100)
         decimal = correct / len(quiz_data)
         flabel = tk.CTkLabel(root, text=f"You got {score}% correct!, thats {correct}/{len(quiz_data)}! - You have {funresponses[decimal]}", font=("Roboto Medium", 25))
         flabel.pack(padx=p, pady=p)
         flabel.place(relx=0.5, rely=0.5, anchor="center")
-
+ 
 def draw():
     global countq
     global submitbutton
-    q_data = quiz_data[countq]
+    c_data = quiz_data[countq]
+    quick = c_data
+    rnd.shuffle(quick["options"])
     countq += 1
     
-    qlabel = tk.CTkLabel(root, text=f"Chris Wood Quiz:\nQuestion {countq}: {q_data['question']}", font=("Roboto Medium", 38), wraplength=wrapping)
+    qlabel = tk.CTkLabel(root, text=f"Chris Wood Quiz:\nQuestion {countq}: {c_data['question']}", font=("Roboto Medium", 38), wraplength=wrapping)
     qlabel.pack(padx=p, pady=p)
 
-    for i, option in enumerate(q_data["options"]):
+    square = tk.CTkFrame(root, width=840, height=100, corner_radius=0, fg_color="transparent")
+    square.pack(pady=p, padx=p, side="left")
+
+    for i, option in enumerate(quick["options"]):
         rb = tk.CTkRadioButton(master=root, text=option, variable=check, value=i+1, command=available)
-        rb.pack(padx=p, pady=10)
+        rb.pack(padx=p, pady=10, anchor="w")
 
     submitbutton = tk.CTkButton(root, text="Submit Answer", command=submit, state="disabled")
-    submitbutton.pack(pady=30)
+    submitbutton.place(relx=0.5, rely=0.5, anchor="center")
 
 draw()
 root.mainloop()
