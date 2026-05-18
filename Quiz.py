@@ -1,4 +1,4 @@
-'''Lucas Russell Damasceno - 11DSD Level 1 Internal.'''
+'''Lucas Russell Damasceno - 11DTSD Level 1 Internal.'''
 import customtkinter as tk
 import random as rnd
 from PIL import Image as img
