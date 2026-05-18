@@ -1,1 +1,1 @@
-Please use "pip install customtkinter."
+Please run "pip install pillow requests customtkinter" in your terminal.

@@ -1,6 +1,9 @@
 '''Lucas Russell Damasceno - 11DSD Level 1 Internal.'''
 import customtkinter as tk
 import random as rnd
+from PIL import Image as img
+import requests as req
+from io import BytesIO as IO
 
 tk.set_appearance_mode("dark")
 
@@ -15,6 +18,7 @@ acheck = 0
 responses = []
 errors = []
 quiz_data = []
+reqdata = "https://upload.wikimedia.org/wikipedia/commons/6/67/Chris_Wood_%28cropped%29.jpg"
 
 funresponses = {0: "ZERO ball knowledge", 
                 0.125: "near to no knowledge on Chris Wood", 
@@ -27,9 +31,9 @@ funresponses = {0: "ZERO ball knowledge",
                 1: "too much knowledge on Chris Wood. You must be cheating!"}
 
 raw_questions = [
-    ("What player is this", ["Chris Wood", "Mohammed Salah", "Cole Palmer"]), 
+    ("What player is this?", ["Chris Wood", "Mohammed Salah", "Cole Palmer"]), 
     ("Which Premier League club did Chris Wood join from Leeds United in 2017?", ["Burnley", "Liverpool", "Derby County"]), 
-    ("At what age did Chris Wood make his debut for the New Zealand senior national team (the All Whites)", ["18", "22", "21"]), 
+    ("At what age did Chris Wood make his debut for the New Zealand senior national team (the All Whites)", ["17", "23", "21"]),
     ("Wood became the first New Zealander to achieve what feat in the English Premier League?", ["Score a hat-trick", "Get more than 10 assists", "Move to LaLiga"]), 
     ("Before his professional career, which club did Wood play for in Auckland before moving to Hamilton at age 11?", ["Onehunga Sports", "Gurkha FC", "Auckland United"]), 
     ("Which city was Chris Wood born in?", ["Auckland", "Christchurch", "Hamilton"]), 
@@ -51,11 +55,22 @@ root.geometry("1000x1000")
 
 check = tk.IntVar(value=0)
 width = root.winfo_screenwidth()
-wrapping = width - width / 5 
+wrapping = width - width / 5
+roboto = tk.CTkFont(family="Roboto", size=20, weight="bold")
 
 def clsc():
     for widget in root.winfo_children(): 
         widget.destroy()
+
+def imgreq(url):
+    headers = {'User-Agent': 'Mozilla/5.0'}
+    urlresp = req.get(url, headers=headers)
+    imgdata = IO(urlresp.content)
+
+    imgdata.seek(0)
+    imgobj = img.open(imgdata)
+
+    return tk.CTkImage(dark_image=imgobj, size=(450, 716))
 
 def available():
     submitbutton.configure(state="normal")
@@ -102,7 +117,16 @@ def draw():
         rb.pack(padx=p, pady=10, anchor="w")
 
     submitbutton = tk.CTkButton(root, text="Submit Answer", command=submit, state="disabled")
-    submitbutton.place(relx=0.5, rely=0.5, anchor="center")
+    submitbutton.place(relx=0.5, rely=0.4, anchor="center")
+    
+    if c_data["question"] == "What player is this?":
+        try:
+            chrisimg = imgreq(reqdata)
+            ilabel = tk.CTkLabel(root, text="", image=chrisimg)
+            ilabel.pack(pady=p, padx=p)
+        except Exception as err:
+            elabel = tk.CTkLabel(root, text=f"There was an error loading the image: {err}", font=roboto, text_color="#8B0000", wraplength=wrapping-20)
+            elabel.pack(padx=p, pady=p)
 
 draw()
 root.mainloop()
