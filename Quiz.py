@@ -19,7 +19,7 @@ responses = []
 errors = []
 quiz_data = []
 # the image url i can use for my http request
-reqdata = "https://upload.wikimedia.org/wikipedia/commons/6/67/Chris_Wood_%28cropped%29.jpg"
+reqdata = "https://www.nzherald.co.nz/resizer/v2/JZOF4D4WBBCEDAICBJM26GKO5E.jpg?auth=042f6c95a0d89079018b9a85d75d93658753e472bfa407defa0623242348bc11&width=576&height=1024&quality=70&focal=386%2C181&smart=false"
 # these are the responses for the score you get (/8)
 funresponses = {0: "ZERO ball knowledge", 
                 0.125: "near to no knowledge on Chris Wood", 
@@ -96,7 +96,7 @@ def imgreq(url):
     # uses pillow to compile the binary data to the users ram
     imgobj = img.open(imgdata)
     # returns the info to ctk
-    return tk.CTkImage(dark_image=imgobj, size=(450, 716))
+    return tk.CTkImage(dark_image=imgobj, size=(403, 716))
 
 # returns the submit button to clickable once a radiobutton has been activated
 def available():
